@@ -1,147 +1,105 @@
+$(() => {
+  const URL = "http://localhost:3000/users";
 
-renderDataGrid([]);
-
-$.ajax({
-  url: "http://localhost:3000/users/",
-  method: "get",
-  success: function (data) {
-    renderDataGrid(data);
-  },
-  error: function (err) {
-    console.log(err);
-  },
-});
-
-function renderDataGrid(data) {
-  $(() => {
-    $("#gridContainer").dxDataGrid({
-      dataSource: data,
-      keyExpr: "id",
-      columns: ["id", "name", "surname", "phone", "email"],
-      showBorders: true,
-    });
+  const usersStore = new DevExpress.data.CustomStore({
+    key: "id",
+    load() {
+      return sendRequest(`${URL}/`);
+    },
+    insert(values) {
+      return sendRequest(`${URL}/new`, "POST", {
+        values: JSON.stringify(values),
+      });
+    },
+    update(key, values) {
+      return sendRequest(`${URL}/${key}`, "PUT", {
+        key,
+        values: JSON.stringify(values),
+      });
+    },
+    remove(key) {
+      return sendRequest(`${URL}/${key}`, "DELETE", {
+        key,
+      });
+    },
   });
-}
 
-const customers = [
-  {
-    ID: 1,
-    CompanyName: "Super Mart of the West",
-    Address: "702 SW 8th Street",
-    City: "Bentonville",
-    State: "Arkansas",
-    Zipcode: 72716,
-    Phone: "(800) 555-2797",
-    Fax: "(800) 555-2171",
-  },
-  {
-    ID: 2,
-    CompanyName: "Electronics Depot",
-    Address: "2455 Paces Ferry Road NW",
-    City: "Atlanta",
-    State: "Georgia",
-    Zipcode: 30339,
-    Phone: "(800) 595-3232",
-    Fax: "(800) 595-3231",
-  },
-  {
-    ID: 3,
-    CompanyName: "K&S Music",
-    Address: "1000 Nicllet Mall",
-    City: "Minneapolis",
-    State: "Minnesota",
-    Zipcode: 55403,
-    Phone: "(612) 304-6073",
-    Fax: "(612) 304-6074",
-  },
-  {
-    ID: 4,
-    CompanyName: "Tom's Club",
-    Address: "999 Lake Drive",
-    City: "Issaquah",
-    State: "Washington",
-    Zipcode: 98027,
-    Phone: "(800) 955-2292",
-    Fax: "(800) 955-2293",
-  },
-  {
-    ID: 5,
-    CompanyName: "E-Mart",
-    Address: "3333 Beverly Rd",
-    City: "Hoffman Estates",
-    State: "Illinois",
-    Zipcode: 60179,
-    Phone: "(847) 286-2500",
-    Fax: "(847) 286-2501",
-  },
-  {
-    ID: 6,
-    CompanyName: "Walters",
-    Address: "200 Wilmot Rd",
-    City: "Deerfield",
-    State: "Illinois",
-    Zipcode: 60015,
-    Phone: "(847) 940-2500",
-    Fax: "(847) 940-2501",
-  },
-  {
-    ID: 7,
-    CompanyName: "StereoShack",
-    Address: "400 Commerce S",
-    City: "Fort Worth",
-    State: "Texas",
-    Zipcode: 76102,
-    Phone: "(817) 820-0741",
-    Fax: "(817) 820-0742",
-  },
-  {
-    ID: 8,
-    CompanyName: "Circuit Town",
-    Address: "2200 Kensington Court",
-    City: "Oak Brook",
-    State: "Illinois",
-    Zipcode: 60523,
-    Phone: "(800) 955-2929",
-    Fax: "(800) 955-9392",
-  },
-  {
-    ID: 9,
-    CompanyName: "Premier Buy",
-    Address: "7601 Penn Avenue South",
-    City: "Richfield",
-    State: "Minnesota",
-    Zipcode: 55423,
-    Phone: "(612) 291-1000",
-    Fax: "(612) 291-2001",
-  },
-  {
-    ID: 10,
-    CompanyName: "ElectrixMax",
-    Address: "263 Shuman Blvd",
-    City: "Naperville",
-    State: "Illinois",
-    Zipcode: 60563,
-    Phone: "(630) 438-7800",
-    Fax: "(630) 438-7801",
-  },
-  {
-    ID: 11,
-    CompanyName: "Video Emporium",
-    Address: "1201 Elm Street",
-    City: "Dallas",
-    State: "Texas",
-    Zipcode: 75270,
-    Phone: "(214) 854-3000",
-    Fax: "(214) 854-3001",
-  },
-  {
-    ID: 12,
-    CompanyName: "Screen Shop",
-    Address: "1000 Lowes Blvd",
-    City: "Mooresville",
-    State: "North Carolina",
-    Zipcode: 28117,
-    Phone: "(800) 445-6937",
-    Fax: "(800) 445-6938",
-  },
-];
+  const dataGrid = $("#grid")
+    .dxDataGrid({
+      dataSource: usersStore,
+      repaintChangesOnly: true,
+      showBorders: true,
+      editing: {
+        refreshMode: "reshape",
+        mode: "cell",
+        allowAdding: true,
+        allowUpdating: true,
+        allowDeleting: true,
+      },
+      scrolling: {
+        mode: "virtual",
+      },
+      columns: ["id", "name", "surname", "phone", "email"],
+      /*summary: {
+        totalItems: [
+          {
+            column: "id",
+            summaryType: "count",
+          },
+        ],
+      },*/
+    })
+    .dxDataGrid("instance");
+
+  $("#refresh-mode").dxSelectBox({
+    items: ["full", "reshape", "repaint"],
+    value: "reshape",
+    inputAttr: { "aria-label": "Refresh Mode" },
+    onValueChanged(e) {
+      dataGrid.option("editing.refreshMode", e.value);
+    },
+  });
+
+  $("#clear").dxButton({
+    text: "Clear",
+    onClick() {
+      $("#requests ul").empty();
+    },
+  });
+
+  function sendRequest(url, method = "GET", data) {
+    const d = $.Deferred();
+
+    logRequest(method, url, data);
+
+    $.ajax(url, {
+      method,
+      data,
+      cache: false,
+      xhrFields: { withCredentials: false },
+    })
+      .done((result) => {
+        console.log(result.data);
+        d.resolve(method === "GET" ? result : result);
+      })
+      .fail((xhr) => {
+        d.reject(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+      });
+
+    return d.promise();
+  }
+
+  function logRequest(method, url, data) {
+    const args = Object.keys(data || {})
+      .map((key) => `${key}=${data[key]}`)
+      .join(" ");
+
+    const logList = $("#requests ul");
+    const time = DevExpress.localization.formatDate(new Date(), "HH:mm:ss");
+    const newItem = $("<li>").text(
+      [time, method, url.slice(URL.length), args].join(" ")
+    );
+
+    logList.prepend(newItem);
+  }
+});

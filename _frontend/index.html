@@ -19,9 +19,23 @@
     ></script>
     <title>GtNet App</title>
   </head>
-  <body>
-    <div class="dx-viewport demo-container">
-      <div id="gridContainer"></div>
+  <body class="dx-viewport">
+    <div class="demo-container">
+      <div id="grid"></div>
+      <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+          <span>Refresh Mode:</span>
+          <div id="refresh-mode"></div>
+        </div>
+        <div id="requests">
+          <div>
+            <div class="caption">Network Requests</div>
+            <div id="clear"></div>
+          </div>
+          <ul></ul>
+        </div>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>
