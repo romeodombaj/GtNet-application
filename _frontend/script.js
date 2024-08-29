@@ -43,11 +43,11 @@ $(() => {
         },
       ],
       columns: [
-        "id",
-        "name",
-        "surname",
-        "phone",
-        "email",
+        { dataField: "id", caption: "ID", allowEditing: false },
+        { dataField: "name", caption: "Name" },
+        { dataField: "surname", caption: "Surname" },
+        { dataField: "phone", caption: "Phone" },
+        { dataField: "email", caption: "Email" },
         {
           type: "buttons",
           width: 110,
@@ -60,9 +60,9 @@ $(() => {
       onEditCanceled: function (e) {
         e.component.option("editing.mode", "cell");
       },
-      onCellClick: function (e) {
+      /*onCellClick: function (e) {
         e.component.option("editing.mode", "cell");
-      },
+      },*/
       /*summary: {
         totalItems: [
           {

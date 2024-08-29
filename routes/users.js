@@ -1,66 +1,106 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
+const fs = require("fs").promises;
 const bodyParser = require("body-parser");
 const db = "./db.json";
 
 const jsonParser = bodyParser.json();
 
-// read data from db
-function readDB() {
-  const data = fs.readFileSync(db, "utf8");
-  return JSON.parse(data);
+const defaultUser = {
+  id: undefined,
+  name: "",
+  surname: "",
+  phone: "",
+  email: "",
+};
+
+async function readDB() {
+  try {
+    const data = await fs.readFile(db, "utf8");
+    return JSON.parse(data);
+  } catch (err) {
+    throw new Error(err);
+  }
 }
 
 // write data to db
-function writeDB(data) {
-  fs.writeFileSync(db, JSON.stringify(data, null, 2), "utf8");
+async function writeDB(data) {
+  try {
+    await fs.writeFile(db, JSON.stringify(data, null, 2), "utf8");
+  } catch (err) {
+    throw new Error("Error writing to database");
+  }
 }
 
 // get all user data
 router.get("/", async (req, res) => {
   console.log("GETTING USER DATA");
-  const users = readDB();
-  res.status(200).json(users);
+
+  try {
+    const users = await readDB();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // add new user
-router.post("/new", jsonParser, (req, res) => {
+router.post("/new", jsonParser, async (req, res) => {
   console.log("ADDING A NEW USER");
-
-  console.log(req.body);
-  const users = readDB();
-  const newUser = {
-    id: users.length ? users[users.length - 1].id + 1 : 1,
-    ...req.body.values,
-  };
-  users.push(newUser);
-  writeDB(users);
-  res.status(201).json(newUser);
+  try {
+    const users = await readDB();
+    const newUser = {
+      ...defaultUser,
+      id: users.length ? users[users.length - 1].id + 1 : 1,
+      ...req.body.values,
+    };
+    users.push(newUser);
+    await writeDB(users);
+    res.status(200).json(await newUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // edit user
-router.put("/:id", jsonParser, (req, res) => {
-  const users = readDB();
-  const index = users.findIndex((u) => u.id === parseInt(req.params.id));
-  if (index !== -1) {
-    users[index] = { ...users[index], ...req.body.values };
-    writeDB(users);
-    res.json(users[index]);
-  } else {
-    res.status(404).json({ message: "User not found" });
+router.put("/:id", jsonParser, async (req, res) => {
+  console.log("UPDATING USER DATA");
+
+  try {
+    const users = await readDB();
+
+    const userId = parseInt(req.params.id);
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    users[userIndex] = { ...users[userIndex], ...req.body.values };
+    await writeDB(users);
+    res.status(200).json(await users[userIndex]);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
 // delete user
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   console.log("DELETING USER");
-  console.log(req.body);
+  try {
+    const users = await readDB();
+    const userId = parseInt(req.params.id, 10);
+    const updatedUsers = users.filter((user) => user.id !== userId);
 
-  let users = readDB();
-  users = users.filter((u) => u.id !== parseInt(req.params.id));
-  writeDB(users);
-  res.status(200).send();
+    if (users.length === updatedUsers.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await writeDB(updatedUsers);
+    res.status(200).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;
