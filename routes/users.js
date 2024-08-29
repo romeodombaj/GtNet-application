@@ -1,36 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs").promises;
 const bodyParser = require("body-parser");
-const db = "./db.json";
-
 const jsonParser = bodyParser.json();
 
-const defaultUser = {
-  id: undefined,
-  name: "",
-  surname: "",
-  phone: "",
-  email: "",
-};
-
-async function readDB() {
-  try {
-    const data = await fs.readFile(db, "utf8");
-    return JSON.parse(data);
-  } catch (err) {
-    throw new Error(err);
-  }
-}
-
-// write data to db
-async function writeDB(data) {
-  try {
-    await fs.writeFile(db, JSON.stringify(data, null, 2), "utf8");
-  } catch (err) {
-    throw new Error("Error writing to database");
-  }
-}
+const { defaultUser, readDB, writeDB } = require("../db");
 
 // get all user data
 router.get("/", async (req, res) => {
