@@ -19,14 +19,8 @@ function writeDB(data) {
 
 // get all user data
 router.get("/", async (req, res) => {
-  fs.readFile(db, "utf8", async (error, data) => {
-    if (error) {
-      console.log(error);
-      res.status(500);
-      return;
-    }
-    res.status(200).json(JSON.parse(data));
-  });
+  const users = readDB();
+  res.code(200).json(users);
 });
 
 // add new user/s
