@@ -1,13 +1,17 @@
 [
   {
     "id": 2,
-    "name": "Petra",
-    "surname": "Kovačić",
-    "email": "petra.kovacic@example.hr",
-    "phone": "+385921234567"
+    "values": {
+      "surname": "Kovačićićić"
+    },
+    "key": 2
   },
   {
     "id": 3,
+    "values": {
+      "surname": "Babići"
+    },
+    "key": 3,
     "name": "Marko",
     "surname": "Babić",
     "email": "marko.babic@example.hr",
@@ -18,7 +22,11 @@
     "name": "Tomislav",
     "surname": "Perić",
     "email": "tomislav.peric@example.hr",
-    "phone": "+385951234567"
+    "phone": "+385951234567",
+    "values": {
+      "surname": "Perićevic"
+    },
+    "key": 5
   },
   {
     "id": 6,
@@ -44,7 +52,7 @@
   {
     "id": 9,
     "name": "Matej",
-    "surname": "Bošnjak",
+    "surname": "Bošnjakoveniko",
     "email": "matej.bosnjak@example.hr",
     "phone": "+385991234567"
   },

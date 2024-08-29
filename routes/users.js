@@ -14,9 +14,7 @@ function readDB() {
 
 // write data to db
 function writeDB(data) {
-  console.log("HERE");
   fs.writeFileSync(db, JSON.stringify(data, null, 2), "utf8");
-  console.log("HERE2");
 }
 
 // get all user data
@@ -43,12 +41,15 @@ router.post("/new", jsonParser, (req, res) => {
 
 // edit user
 router.put("/:id", jsonParser, (req, res) => {
-  console.log("EDITING A USER");
-  const id = req.body.key;
-  const user = req.body.values;
-
-  console.log(id);
-  console.log(user);
+  const users = readDB();
+  const index = users.findIndex((u) => u.id === parseInt(req.params.id));
+  if (index !== -1) {
+    users[index] = { ...users[index], ...req.body.values };
+    writeDB(users);
+    res.json(users[index]);
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
 });
 
 // delete user
