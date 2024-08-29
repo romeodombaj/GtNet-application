@@ -32,8 +32,14 @@ $(() => {
         allowDeleting: true,
         useIcons: true,
       },
-      scrolling: {
-        mode: "virtual",
+      paging: {
+        pageSize: 30,
+        pageIndex: 0,
+      },
+      pager: {
+        showPageSizeSelector: true,
+        allowedPageSizes: [20, 30, 50],
+        showNavigationButtons: true,
       },
       buttons: [
         "delete",
@@ -60,6 +66,7 @@ $(() => {
       onEditCanceled: function (e) {
         e.component.option("editing.mode", "cell");
       },
+
       /*onCellClick: function (e) {
         e.component.option("editing.mode", "cell");
       },*/

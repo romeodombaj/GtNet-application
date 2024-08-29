@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
 const { defaultUser, readDB, writeDB } = require("../db");
+const { validateUser } = require("../dataValidation");
 
 // get all user data
 router.get("/", async (req, res) => {
@@ -18,8 +19,9 @@ router.get("/", async (req, res) => {
 });
 
 // add new user
-router.post("/new", jsonParser, async (req, res) => {
+router.post("/new", [jsonParser, validateUser], async (req, res) => {
   console.log("ADDING A NEW USER");
+
   try {
     const users = await readDB();
     const newUser = {
@@ -60,6 +62,7 @@ router.put("/:id", jsonParser, async (req, res) => {
 // delete user
 router.delete("/:id", async (req, res) => {
   console.log("DELETING USER");
+
   try {
     const users = await readDB();
     const userId = parseInt(req.params.id, 10);
