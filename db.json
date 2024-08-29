@@ -7,17 +7,6 @@
     "key": 2
   },
   {
-    "id": 3,
-    "values": {
-      "surname": "Babići"
-    },
-    "key": 3,
-    "name": "Marko",
-    "surname": "Babić",
-    "email": "marko.babic@example.hr",
-    "phone": "+385931234567"
-  },
-  {
     "id": 5,
     "name": "Tomislav",
     "surname": "Perić",
@@ -692,5 +681,29 @@
     "surname": "Kovač",
     "email": "toni.kovac@example.hr",
     "phone": "+385991234578"
+  },
+  {
+    "id": 101
+  },
+  {
+    "id": 102
+  },
+  {
+    "id": 103
+  },
+  {
+    "id": 104
+  },
+  {
+    "id": 105
+  },
+  {
+    "id": 106
+  },
+  {
+    "id": 107
+  },
+  {
+    "id": 108
   }
 ]

@@ -30,11 +30,39 @@ $(() => {
         allowAdding: true,
         allowUpdating: true,
         allowDeleting: true,
+        useIcons: true,
       },
       scrolling: {
         mode: "virtual",
       },
-      columns: ["id", "name", "surname", "phone", "email"],
+      buttons: [
+        "delete",
+        {
+          name: "edit",
+          visible: false,
+        },
+      ],
+      columns: [
+        "id",
+        "name",
+        "surname",
+        "phone",
+        "email",
+        {
+          type: "buttons",
+          width: 110,
+          buttons: [{ name: "edit", visible: false }, "delete"],
+        },
+      ],
+      onInitNewRow: function (e) {
+        e.component.option("editing.mode", "form");
+      },
+      onEditCanceled: function (e) {
+        e.component.option("editing.mode", "cell");
+      },
+      onCellClick: function (e) {
+        e.component.option("editing.mode", "cell");
+      },
       /*summary: {
         totalItems: [
           {
@@ -74,6 +102,7 @@ $(() => {
       cache: false,
       xhrFields: { withCredentials: false },
     })
+      /// RESULT : RESULT??
       .done((result) => {
         d.resolve(method === "GET" ? result : result);
       })
