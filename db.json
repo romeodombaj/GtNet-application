@@ -1,12 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Ivan",
-    "surname": "Horvat",
-    "email": "ivan.horvat@example.hr",
-    "phone": "+385911234567"
-  },
-  {
     "id": 2,
     "name": "Petra",
     "surname": "Kovačić",
@@ -19,13 +12,6 @@
     "surname": "Babić",
     "email": "marko.babic@example.hr",
     "phone": "+385931234567"
-  },
-  {
-    "id": 4,
-    "name": "Ana",
-    "surname": "Marić",
-    "email": "ana.maric@example.hr",
-    "phone": "+385941234567"
   },
   {
     "id": 5,

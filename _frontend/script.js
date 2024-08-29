@@ -7,15 +7,10 @@ $(() => {
       return sendRequest(`${URL}/`);
     },
     insert(values) {
-      return sendRequest(`${URL}/new`, "POST", {
-        values: JSON.stringify(values),
-      });
+      return sendRequest(`${URL}/new`, "POST", { values });
     },
     update(key, values) {
-      return sendRequest(`${URL}/${key}`, "PUT", {
-        key,
-        values: JSON.stringify(values),
-      });
+      return sendRequest(`${URL}/${key}`, "PUT", { values, key });
     },
     remove(key) {
       return sendRequest(`${URL}/${key}`, "DELETE", {
@@ -74,12 +69,12 @@ $(() => {
 
     $.ajax(url, {
       method,
-      data,
+      data: JSON.stringify(data),
+      contentType: "application/json",
       cache: false,
       xhrFields: { withCredentials: false },
     })
       .done((result) => {
-        console.log(result.data);
         d.resolve(method === "GET" ? result : result);
       })
       .fail((xhr) => {
