@@ -38,7 +38,7 @@ router.post("/new", [jsonParser, validateUser], async (req, res) => {
 });
 
 // edit user
-router.put("/:id", jsonParser, async (req, res) => {
+router.put("/:id", [jsonParser, validateUser], async (req, res) => {
   console.log("UPDATING USER DATA");
 
   try {
