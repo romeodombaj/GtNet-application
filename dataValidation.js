@@ -20,7 +20,7 @@ module.exports = {
     body("values.phone")
       .notEmpty()
       .withMessage("Phone number is required")
-      .matches(/^[0-9]\d{9,14}$/)
+      .matches(/^(\+?\d{1,3})?\d{7,14}$/)
       .withMessage("Invalid phone number"),
 
     (req, res, next) => {

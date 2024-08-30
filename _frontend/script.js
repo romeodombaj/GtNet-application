@@ -50,10 +50,47 @@ $(() => {
       ],
       columns: [
         { dataField: "id", caption: "ID", allowEditing: false },
-        { dataField: "name", caption: "Name" },
-        { dataField: "surname", caption: "Surname" },
-        { dataField: "phone", caption: "Phone" },
-        { dataField: "email", caption: "Email" },
+        {
+          dataField: "name",
+          caption: "Name",
+          validationRules: [
+            { type: "required" },
+            {
+              type: "stringLength",
+              max: 25,
+              message: "Max length of name is 25 letters.",
+            },
+          ],
+        },
+        {
+          dataField: "surname",
+          caption: "Surname",
+          validationRules: [
+            { type: "required" },
+            {
+              type: "stringLength",
+              max: 25,
+              message: "Max length of surname is 25 letters.",
+            },
+          ],
+        },
+        {
+          dataField: "phone",
+          caption: "Phone",
+          validationRules: [
+            { type: "required" },
+            {
+              type: "pattern",
+              message: 'Your phone must have "(555) 555-5555" format!',
+              pattern: /^(\+?\d{1,3})?\d{7,14}$|^(0\d{9,10})$/i,
+            },
+          ],
+        },
+        {
+          dataField: "email",
+          caption: "Email",
+          validationRules: [{ type: "required" }, { type: "email" }],
+        },
         {
           type: "buttons",
           width: 110,
