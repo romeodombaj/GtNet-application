@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const cors = require("cors");
-
 app.use(cors());
-app.listen(3000);
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
 
 const useRouter = require("./routes/users");
 

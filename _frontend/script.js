@@ -58,7 +58,13 @@ $(() => {
         },
       ],
       columns: [
-        { dataField: "id", caption: "ID", allowEditing: false },
+        {
+          dataField: "id",
+          caption: "ID",
+          allowEditing: false,
+          maxWidth: 100,
+          width: 60,
+        },
         {
           dataField: "name",
           caption: "Name",
@@ -84,14 +90,28 @@ $(() => {
           ],
         },
         {
+          dataField: "oib",
+          caption: "OIB",
+          validationRules: [
+            { type: "required" },
+            {
+              type: "stringLength",
+              max: 11,
+              min: 11,
+              message: "OIB has to have 11 digits.",
+            },
+          ],
+        },
+        {
           dataField: "phone",
           caption: "Phone",
           validationRules: [
             { type: "required" },
             {
               type: "pattern",
-              message: 'Your phone must have "(555) 555-5555" format!',
-              pattern: /^(\+?\d{1,3})?\d{7,14}$|^(0\d{9,10})$/i,
+              message:
+                'Your phone must have "(555)-55-555-5555 or (555)-55-555-555" format!',
+              pattern: /^\(\d{3}\)-\d{2}-\d{3}-\d{3,4}$/i,
             },
           ],
         },
@@ -116,14 +136,14 @@ $(() => {
       /*onCellClick: function (e) {
         e.component.option("editing.mode", "cell");
       },*/
-      /*summary: {
+      summary: {
         totalItems: [
           {
             column: "id",
             summaryType: "count",
           },
         ],
-      },*/
+      },
     })
     .dxDataGrid("instance");
 
@@ -155,11 +175,11 @@ $(() => {
       cache: false,
       xhrFields: { withCredentials: false },
     })
-      /// RESULT : RESULT??
       .done((result) => {
-        d.resolve(method === "GET" ? result : result);
+        d.resolve(result);
       })
       .fail((xhr) => {
+        alert(xhr.responseText);
         d.reject(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
       });
 

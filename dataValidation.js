@@ -1,3 +1,4 @@
+const e = require("express");
 const { body, validationResult } = require("express-validator");
 
 module.exports = {
@@ -20,8 +21,13 @@ module.exports = {
     body("values.phone")
       .notEmpty()
       .withMessage("Phone number is required")
-      .matches(/^(\+?\d{1,3})?\d{7,14}$/)
+      .matches(/^\(\d{3}\)-\d{2}-\d{3}-\d{3,4}$/)
       .withMessage("Invalid phone number"),
+    body("values.oib")
+      .notEmpty()
+      .withMessage("OIB is required")
+      .isLength({ min: 11, max: 11 })
+      .withMessage("Invalid OIB"),
 
     (req, res, next) => {
       const errors = validationResult(req);
@@ -44,4 +50,16 @@ module.exports = {
       next();
     },
   ],
+
+  // checks if oib is unique
+  checkOIB: (data, newData, res) => {
+    const unique = data.find((el) => el.oib === newData.oib);
+
+    if (unique !== undefined) {
+      console.log("DUPLICATE OIB");
+      return res.status(409).json({ message: "Duplicate user OIB." });
+    }
+
+    return;
+  },
 };

@@ -8,6 +8,7 @@ module.exports = {
     surname: "",
     phone: "",
     email: "",
+    oib: "",
   },
 
   readDB: async () => {

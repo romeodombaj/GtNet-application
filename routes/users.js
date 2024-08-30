@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
 const { defaultUser, readDB, writeDB } = require("../db");
-const { validateUser } = require("../dataValidation");
+const { validateUser, checkOIB } = require("../dataValidation");
 
 // get all user data
 router.get("/", async (req, res) => {
@@ -29,6 +29,10 @@ router.post("/new", [jsonParser, validateUser], async (req, res) => {
       id: users.length ? users[users.length - 1].id + 1 : 1,
       ...req.body.values,
     };
+
+    await checkOIB(users, newUser, res);
+    console.log("AFTER DUPLICATE");
+
     users.push(newUser);
     await writeDB(users);
     res.status(200).json(await newUser);
