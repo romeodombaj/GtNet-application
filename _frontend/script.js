@@ -80,6 +80,9 @@ $(() => {
         {
           dataField: "surname",
           caption: "Surname",
+          // Nisam skužio u vezi pretraživanja da li se mora samo na ime i email pretraživati ili je ok ako se na sve pretražuje
+          // ako sam ona ime i email u stupcima koje ne želimo pretražiti dodaje se ovaj redak ispod
+          //allowSearch: false,
           validationRules: [
             { type: "required" },
             {
@@ -133,9 +136,16 @@ $(() => {
         e.component.option("editing.mode", "cell");
       },
 
-      /*onCellClick: function (e) {
+      // kad se klikne van iz forme forma se zatvara zbog ove funkcije ali je moguce odmah uredivati ostale retke,
+      // ako se funkcija makne ostali redci se nece moci uredivati tako dugo dok se forma ne otkaze ili savea
+      onRowClick: function (e) {
         e.component.option("editing.mode", "cell");
-      },*/
+      },
+      //
+
+      onSaving: function (e) {
+        e.component.option("editing.mode", "cell");
+      },
       summary: {
         totalItems: [
           {
