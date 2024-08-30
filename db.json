@@ -2,10 +2,10 @@
   {
     "id": 1,
     "name": "Ivan",
-    "surname": "Horvat",
+    "surname": "Horvata",
     "phone": "(385)-47-893-2901",
     "email": "ivan.horvat@example.com",
-    "oib": "39587612345"
+    "oib": "39587612343"
   },
   {
     "id": 2,
@@ -53,7 +53,7 @@
     "surname": "Petrović",
     "phone": "(385)-61-284-7654",
     "email": "josip.petrovic@example.com",
-    "oib": "57483910246"
+    "oib": "57483910212"
   },
   {
     "id": 8,

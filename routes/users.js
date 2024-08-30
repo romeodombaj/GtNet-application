@@ -31,7 +31,7 @@ router.post("/new", [jsonParser, validateUser], async (req, res) => {
     };
 
     await checkOIB(users, newUser, res);
-    
+
     users.push(newUser);
     await writeDB(users);
     res.status(200).json(await newUser);
