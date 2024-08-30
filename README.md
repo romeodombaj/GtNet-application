@@ -7,7 +7,7 @@ Aplikaciju sam pokrenuo pomoću nodemona na wsl linux subsistemu. Env nisam stav
 
 
 ####Da bi se aplikacija pokrenula potrebno je izvršiti sljedeće korake:
-  - Naredbom `clone https://github.com/romeodombaj/GtNet-application.git` klonirati repozitorij na željenoj lokaciji
+  - Naredbom `git clone https://github.com/romeodombaj/GtNet-application.git` klonirati repozitorij na željenoj lokaciji
   
   - Nakon kloniranja svi potrebni paketi izvršavaju se naredbom: `npm install`
   
