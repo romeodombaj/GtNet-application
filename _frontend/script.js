@@ -32,6 +32,15 @@ $(() => {
         allowDeleting: true,
         useIcons: true,
       },
+      sorting: {
+        mode: "multiple",
+      },
+      headerFilter: {
+        visible: true,
+        allowSearch: true,
+      },
+      filterRow: { visible: true },
+      searchPanel: { visible: true },
       paging: {
         pageSize: 30,
         pageIndex: 0,
